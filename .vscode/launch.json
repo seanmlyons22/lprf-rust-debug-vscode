@@ -1,0 +1,47 @@
+{
+    // This file is based on this helpful blog  post:
+    // https://ferrous-systems.com/blog/gdb-and-defmt/
+    "version": "0.2.0",
+    "showDevDebugOutput": "raw",
+    "configurations": [
+        {
+            "showDevDebugOutput": "raw",
+            "cwd": "${workspaceRoot}",
+            "name": "Flash & Debug",
+            // build latest firmware first!
+            "preLaunchTask": "rust: cargo build",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "gdbTarget": ":3333",
+            // TODO - Change to your target and application name
+            "executable": "./target/thumbv7em-none-eabihf/debug/defmt-test-app",
+            // TODO - Update to your device
+            // You can get this from https://github.com/seanmlyons22/ti-lprf-pacs
+            "svdFile": "${userHome}/dev/rust/ti-lprf-pac/svds/cc13x2_cc26x2.svd",
+            "gdbPath": "arm-none-eabi-gdb",
+            //  ITM is not yet working on LPRF devices in openocd
+            // "postLaunchCommands": [
+            //     "monitor tpiu config internal itm.fifo uart off 12000000",
+            //     "monitor itm port 0 on",
+            // ],
+            "configFiles": [
+                "board/ti_cc26x2_launchpad.cfg",
+            ],
+        },
+        {
+            "cwd": "${workspaceRoot}",
+            "name": "Attach Debug",
+            "request": "attach",
+            "type": "cortex-debug",
+            "servertype": "external",
+            "gdbTarget": ":3333",
+            // TODO - Change to your target and application name
+            "executable": "./target/thumbv7em-none-eabihf/debug/defmt-test-app",
+            "gdbPath": "arm-none-eabi-gdb", // or gdb or multiarch-gdb
+            // TODO - Update to your device
+            // You can get this from https://github.com/seanmlyons22/ti-lprf-pacs
+            "svdFile": "${userHome}/dev/rust/ti-lprf-pac/svds/cc13x2_cc26x2.svd",
+        }
+    ]
+}
